@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Untukmu 🌻</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Delius&family=Inter:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-gradient: linear-gradient(135deg, #fffcf2 0%, #ffeedd 100%);
+            --accent-color: #e6a15c;
+            --text-main: #4a4238;
+            --font-serif: 'Playfair Display', serif;
+            --font-sans: 'Inter', sans-serif;
+            --font-handwritten: 'Delius', cursive;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            font-family: var(--font-sans);
+            background: var(--bg-gradient);
+            color: var(--text-main);
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        /* --- SCREEN 1 --- */
+        #screen1 {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: var(--bg-gradient);
+            position: relative;
+            z-index: 10;
+            transition: opacity 1s ease;
+        }
+
+        .btn-start {
+            padding: 16px 45px;
+            font-family: var(--font-serif);
+            font-size: 1.2rem;
+            font-style: italic;
+            color: white;
+            background: linear-gradient(45deg, #e6a15c, #f3c68f);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(230, 161, 92, 0.3);
+            transition: all 0.4s ease;
+        }
+
+        .btn-start:hover { transform: scale(1.05); }
+
+        /* --- SCREEN 2: TEXT & SUNFLOWER --- */
+        #screen2 {
+            display: none;
+            opacity: 0;
+            width: 100%;
+            min-height: 180vh;
+            position: relative;
+            box-sizing: border-box;
+            transition: opacity 1.2s ease;
+        }
+
+        .sunflower-bg {
+            position: fixed;
+            font-size: 2.8rem;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0;
+            transform: scale(0) rotate(-20deg);
+            animation: sunflowerSpawn 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards,
+                      sway 4s ease-in-out infinite alternate 1s;
+        }
+
+        @keyframes sunflowerSpawn { to { opacity: 0.85; transform: scale(1) rotate(0deg); } }
+        @keyframes sway { 0% { transform: rotate(-8deg) translateY(0); } 100% { transform: rotate(8deg) translateY(-8px); } }
+
+        .intro-text-box {
+            max-width: 480px; 
+            margin: 25vh auto 0 auto;
+            text-align: center;
+            padding: 20px;
+            position: relative;
+            z-index: 5;
+            font-family: var(--font-serif);
+            font-size: 1.45rem;
+            line-height: 2;
+            color: #5d5345;
+        }
+
+        .scroll-hint {
+            text-align: center;
+            margin-top: 15vh;
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            color: #a89f91;
+            animation: bounce 2.5s infinite;
+        }
+
+        @keyframes bounce { 0%, 20%, 50%, 80%, 100% { transform: translateY(0); opacity: 0.5; } 40% { transform: translateY(-8px); opacity: 1; } }
+
+        .password-section {
+            margin-top: 40vh;
+            text-align: center;
+            padding-bottom: 20vh;
+            position: relative;
+            z-index: 5;
+        }
+
+        .btn-trigger-pw {
+            padding: 14px 35px;
+            background-color: transparent;
+            color: var(--text-main);
+            border: 1px solid var(--accent-color);
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-trigger-pw:hover { background-color: var(--accent-color); color: white; }
+
+        /* --- SCREEN 3: WATERFALL FOTO --- */
+        #screen3 {
+            display: none;
+            position: fixed;
+            top: -100%;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, #0b0c10 0%, #1a1c23 100%);
+            z-index: 100;
+            transition: top 1.8s cubic-bezier(0.76, 0, 0.24, 1);
+            overflow: hidden;
+        }
+
+        #screen3.active { top: 0; }
+
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: #fff;
+            opacity: 0;
+            border-radius: 50%;
+            box-shadow: 0 0 12px #fff, 0 0 25px #fff;
+            animation: shootingStar 4s linear infinite;
+        }
+
+        @keyframes shootingStar {
+            0% { transform: rotate(-30deg) translateX(0); opacity: 0; width: 0px; }
+            8% { opacity: 0.8; width: 80px; }
+            25% { transform: rotate(-30deg) translateX(-500px); opacity: 0; width: 0px; }
+            100% { opacity: 0; }
+        }
+
+        .photo-rain-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: none;
+        }
+
+        .falling-photo {
+            position: absolute;
+            width: 110px;
+            height: 110px;
+            border: 4px solid white;
+            border-radius: 4px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.6);
+            overflow: hidden;
+            top: -150px;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .falling-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .falling-photo.drop-animation {
+            animation: singleDrop 7s linear forwards;
+        }
+
+        @keyframes singleDrop {
+            0% { top: -150px; opacity: 0; }
+            10% { opacity: 1; }
+            85% { opacity: 1; }
+            100% { top: 105%; opacity: 0; }
+        }
+
+        /* --- AMPLOP --- */
+        .envelope-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            z-index: 120;
+            transition: transform 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            text-align: center;
+        }
+
+        .envelope-container.show {
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .envelope-btn {
+            font-size: 4.5rem;
+            cursor: pointer;
+            background: none;
+            border: none;
+            filter: drop-shadow(0 5px 15px rgba(255,255,255,0.2));
+            animation: float 2.5s infinite alternate ease-in-out;
+        }
+
+        @keyframes float { 0% { transform: translateY(0); } 100% { transform: translateY(-12px); } }
+
+        /* --- KOTAK SURAT SLIDER (SWIPEABLE) --- */
+        .letter-box {
+            display: none;
+            position: fixed;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 85%;
+            max-width: 440px;
+            background: #fffdf9;
+            border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+            z-index: 200;
+            color: #443e36;
+            overflow: hidden;
+            font-family: var(--font-handwritten);
+        }
+
+        /* Container Pembungkus Slide */
+        .slider-container {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+            width: 100%;
+        }
+
+        /* Setiap Kertas Surat */
+        .slide-page {
+            min-width: 100%;
+            box-sizing: border-box;
+            padding: 30px 30px 15px 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            line-height: 1.6;
+            font-size: 1.05rem;
+            max-height: 65vh;
+            overflow-y: auto;
+        }
+
+        .slide-page p {
+            margin: 0;
+            text-align: left;
+            white-space: pre-line;
+        }
+
+        /* Navigasi Tombol Slider */
+        .slider-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 25px 25px 25px;
+            background: #fffdf9;
+        }
+
+        .nav-btn {
+            background: #5d5345;
+            color: white;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: background 0.3s;
+            font-family: var(--font-sans);
+        }
+
+        .nav-btn:hover { background: var(--accent-color); }
+        .nav-btn:disabled { background: #dcd4c9; cursor: not-allowed; }
+
+        .slide-counter {
+            font-size: 0.85rem;
+            color: #8e8170;
+            letter-spacing: 1px;
+            font-family: var(--font-sans);
+        }
+
+        .close-letter-btn {
+            background: #c97d60;
+            color: white;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-family: var(--font-sans);
+        }
+    </style>
+</head>
+<body>
+
+    <audio id="backgroundMusic" loop>
+        <source src="musik.mp3" type="audio/mpeg">
+    </audio>
+
+    <div id="screen1">
+        <button class="btn-start" onclick="startApp()">Tekan Di Sini</button>
+    </div>
+
+    <div id="screen2">
+        <div id="sunflowers-container"></div>
+
+        <div class="intro-text-box">
+            Surat ini seharusnya ada<br>
+            bersama dengan sunflower yang kemaren,<br>
+            ternyata suratnya terjatuh di tas.
+        </div>
+
+        <div class="scroll-hint">SCROLL KEBAWAH</div>
+
+        <div class="password-section">
+            <button class="btn-trigger-pw" id="btnTrigger" onclick="triggerWaterfall()">Tekan Di Sini</button>
+        </div>
+    </div>
+
+    <div id="screen3">
+        <div class="star" style="top: 15%; right: 15%; animation-delay: 0s;"></div>
+        <div class="star" style="top: 30%; right: 40%; animation-delay: 2s;"></div>
+        <div class="star" style="top: 50%; right: 20%; animation-delay: 1s;"></div>
+
+        <div class="photo-rain-container" id="photoRain">
+            <div class="falling-photo" id="img1"><img src="foto1.jpg" alt="1"></div>
+            <div class="falling-photo" id="img2"><img src="foto2.jpg" alt="2"></div>
+            <div class="falling-photo" id="img3"><img src="foto3.jpg" alt="3"></div>
+            <div class="falling-photo" id="img4"><img src="foto4.jpg" alt="4"></div>
+            <div class="falling-photo" id="img5"><img src="foto5.jpg" alt="5"></div>
+            <div class="falling-photo" id="img6"><img src="foto6.jpg" alt="6"></div>
+            <div class="falling-photo" id="img7"><img src="foto7.jpg" alt="7"></div>
+            <div class="falling-photo" id="img8"><img src="foto8.jpg" alt="8"></div>
+            <div class="falling-photo" id="img9"><img src="foto9.jpg" alt="9"></div>
+        </div>
+
+        <div class="envelope-container" id="envelopeContainer">
+            <button class="envelope-btn" onclick="openLetter()">✉️</button>
+            <p style="color: #ebdcd0; font-size: 0.9rem; letter-spacing: 1px; font-family: var(--font-serif); font-style: italic;">Ada sepucuk surat untukmu...</p>
+        </div>
+    </div>
+
+    <div class="letter-box" id="letterBox">
+        <div class="slider-container" id="sliderContainer">
+            
+            <div class="slide-page">
+                <p>hola caayaaang
+
+                are u okaay?
+                cayang beneran tidaak kenapa-kenapa kann, soalnya aku ngerasa cayangg lagi ada yang dipikirin, jangan sungkan dan jangan gak enakan yaa kalo mau ngomong sama akuu. kann cayangg tau kalo aku bakal menerima cayang baik cayang lagi senang ataupun cayangg lagi sedih. ceritain ajaa cayangg kalo emanng ada sesuatu atau ada yang lagi cayang pikirin aku bakal nerima semuannya kokk. aku akan selalu ada buat cayang mau gimanapun itu.
+                ohh iyaa cayangg, cayangg tauu kann kalo akuu bulan depan bakalan pergi kp ke dumai dan itu satu bulan aku perginya, sedih rasanya cayangg mikirin gak bisa ketemu cayang selama sebulan tuu.
+                jadi aku buatin cayang satu sunflower supaya cayaang selalu inget akuu, dan aku sengaja jugaa bikimmya yang besar heheeee.
+                terus  buat wangi sunflowernyaa akuu semprotin jugaa parfum akuu tapi gaa tau juga bakal tahan lama atau engga tapii aku hanya berharap dengan adanya sunflower itu nggaaa membuat caayang jadii lupain akuuu. </p>
+            </div>
+
+            <div class="slide-page">
+                <p>maaf yaa kurang sempurna dan masih ada kurangg dari bungaanyaa, awalnya aku niatnya mau buat dan ngasihnya nantii beneran pas aku udah mau berangkat kp, tapi setelah sadar kalau ada sesuatu yang lagi cayangg pikirin jadi akuu buru-buru buatnya dan ngasih supaya cayang kembali happy lagi dan mau dan semoga cayangg mauu cerita ke aku aku apa yang lagii ccaayangg pikiiriin.
+                yaudah cayangg dah kepanjangan juga kayaknyaa, pokoknya aku sayaangg bangett sama kamuudan semogaa aku bisa nepatin semua janji yang aku buat ke kamu yaaa, doain aku selaluu yaa. aku jugaa tetap akan berusaha dan berdoa jugaa
+
+                LOVVEEE U SOO MUCHH CAYAANGGG</p>
+            </div>
+
+            <div class="slide-page">
+                <p>ituu tadi surat yang aku pengen kasih ke kamu kemaren, waktu kamu jujur sama aku, bahwa kamu butuh waktu dan space buat sendiri dulu. dan aku rencananya mau ngirimnya malem itu jugaa hehee, tapi ternhyata belum selesai codingannya dan masih ada yang gaa muncul jadi aku mutusin buat ga terusin dulu buatnya malam tadi.
+                tapii setelah aku pikir-pikir lebih baik aku selesein aja dan tambahin aja ini sedikit. </p>
+            </div>
+
+            <div class="slide-page">
+                <p>ohh iyaa mungkin akuu juga akan jujur disini sama kamu, akuu sangat bersyukur dan bahagia banget bisa ketemu sama kamu. banyak hal-hal yang baru aku rasain saat aku ketemu dan bisa deket sama kamu, aku baru sadar kenapa banyakk orang mengejar orang-orang yang mereka sayangg, ternyata semenyenangkan ini yaa bisa deket sama orang yang sangat kitaa sayangg. kamu tauu gaa janji dan semua mimpi yuang aku bialng ke kamu dan aku pengen ngejalaninnya samaa kamu, ituu beneran aku tanem dalam diri aku harus aku tepatin dan lakuin. karena apa, karena sebahagia ituu akuu saat bareng sama kamu. akuu selalu berdoa sama Allah agar aku bisa ngelakuinn semuanya tanpa ngebuat kamu kecewa dan dengan cara yang buat kita saling bahagia. bagii aku, kamu bukanlaah wanita yang datang ke hidup aku dan lewat  gitu aja, kamu adalah orang yang udah banyak memberi aku pandangan lain tentang bagaimana ngejalani hidup, jangan sampai menyesali sesuatu yang kita lakuin sedari awal. akuu bukan cuma sayang dan cinta sama kamu tapi kamu juga sangat berharga dan berarti bagii aku sekarang, seseorang yang ingin aku tunjukin kalau aku sukses dan mencapai sesuatau suatu saat nanti selain ibuk akuu. mungkin cuma itu yang aku mau billing ke kamuu.</p>
+            </div>
+
+            <div class="slide-page">
+                <p>makasiih yaa kamu udaah jujur sama perasaan kamu sendiri, dan aku tau kamu ngelakuinnya demi kamu dan akuu jugaa. maaf jugaa akuu ga menyadari hal itu. akuu gaa tau kalo kamu mikirin hal itu terus setiap hari yang membuat kamu kurang nyaman juga jadinya.
+                kamu bilang lagii butuh waktu buat nyeleseinnya sendiri dulu yaa, apakah aku beneran gaa bisa yaa ngebantuin kamuu untuk hal ini. akuu juga ga maksaa kamu buat minta bantuan akuu, tapii karnaa akuu saaangaatt saayaangg sama kamu dan kamu orang pertama yang akuu sangaat sayangg, kalo emang ada yang bisa aku bantu selesein bilang ajaa yaa, kalo aku ga bales chat langsung aja call akuu, aku pasti bakal jadi orang pertama yang bantuin kamu. karna akuu juga ingin nolongin seseorang yang berharga bagi akuu, orang yang udah buat aku jadi lebih bahagia, orang yang udah membuka dunia baru bagi bagii akuu, dan orang yang udaah memberi warna baru ke hidup akuu yang menunjukkan kalo hidup tuu bukan sekedar hitam putih loh banyak warna lain yang harus dicoba, dilakuin dan dirasain.
+                kalo memang kamu beneran mau mnyeleseinnya sendiri gapapaa, ituu pilihan kamu jugaa, akuu harap ini bukan jadi akhir bagi kita berdua yaa, yang akuu bisa lakuin cuma doain kamu supaya kamu selalu baik-baik ajaa, dan ingeet yaa akuu akan selalu adaa buat kamu.</p>
+            </div>
+
+        </div>
+
+        <div class="slider-navigation">
+            <button class="nav-btn" id="prevBtn" onclick="moveSlide(-1)" disabled>Back</button>
+            <span class="slide-counter" id="slideCounter">1 / 5</span>
+            <button class="nav-btn" id="nextBtn" onclick="moveSlide(1)">Next</button>
+            <button class="close-letter-btn" id="closeBtn" style="display:none;" onclick="closeLetter()">Tutup</button>
+        </div>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const totalSlides = 5;
+
+        function moveSlide(direction) {
+            currentSlide += direction;
+            const container = document.getElementById('sliderContainer');
+            container.style.transform = `translateX(-${currentSlide * 100}%)`;
+            
+            document.getElementById('slideCounter').innerText = `${currentSlide + 1} / ${totalSlides}`;
+            document.getElementById('prevBtn').disabled = currentSlide === 0;
+            
+            if (currentSlide === totalSlides - 1) {
+                document.getElementById('nextBtn').style.display = 'none';
+                document.getElementById('closeBtn').style.display = 'block';
+            } else {
+                document.getElementById('nextBtn').style.display = 'block';
+                document.getElementById('closeBtn').style.display = 'none';
+            }
+        }
+
+        function closeLetter() {
+            document.getElementById('letterBox').style.display = 'none';
+        }
+
+        function openLetter() {
+            document.getElementById('letterBox').style.display = 'block';
+        }
+
+        function startApp() {
+            const music = document.getElementById('backgroundMusic');
+            music.play().catch(e => console.log("Audio play prevented.", e));
+
+            const s1 = document.getElementById('screen1');
+            s1.style.opacity = '0';
+            setTimeout(() => {
+                s1.style.display = 'none';
+                const s2 = document.getElementById('screen2');
+                s2.style.display = 'block';
+                setTimeout(() => {
+                    s2.style.opacity = '1';
+                    generateSunflowersRandomly();
+                }, 50);
+            }, 1000);
+        }
+
+        function generateSunflowersRandomly() {
+            const container = document.getElementById('sunflowers-container');
+            const zones = [
+                {top: 6, left: 6}, {top: 4, left: 48}, {top: 6, left: 90},
+                {top: 22, left: 3}, {top: 18, left: 93},
+                {top: 38, left: 4}, {top: 34, left: 92},
+                {top: 54, left: 2}, {top: 50, left: 94}
+            ];
+
+            zones.forEach((zone, index) => {
+                setTimeout(() => {
+                    const el = document.createElement('div');
+                    el.className = 'sunflower-bg';
+                    el.innerHTML = '🌻';
+                    el.style.top = zone.top + '%';
+                    el.style.left = zone.left + '%';
+                    el.style.animationDelay = `0s, ${Math.random() * 2}s`;
+                    container.appendChild(el);
+                }, index * 200);
+            });
+        }
+
+        function triggerWaterfall() {
+            const s3 = document.getElementById('screen3');
+            s3.style.display = 'block';
+            
+            setTimeout(() => { s3.classList.add('active'); }, 100);
+
+            setTimeout(() => {
+                document.getElementById('photoRain').style.display = 'block';
+                
+                for (let i = 1; i <= 9; i++) {
+                    const photoElement = document.getElementById(`img${i}`);
+                    setupAndDropPhoto(photoElement, (i - 1) * 1600); 
+                }
+            }, 1800);
+
+            setTimeout(() => {
+                document.getElementById('envelopeContainer').classList.add('show');
+            }, 16000);
+        }
+
+        function setupAndDropPhoto(element, delayTime) {
+            setTimeout(() => {
+                randomizePhotoProperties(element);
+                element.classList.add('drop-animation');
+
+                element.addEventListener('animationend', function handleAnimationEnd() {
+                    element.classList.remove('drop-animation');
+                    void element.offsetWidth; 
+                    randomizePhotoProperties(element);
+                    element.classList.add('drop-animation');
+                });
+            }, delayTime);
+        }
+
+        function randomizePhotoProperties(element) {
+            const randomLeft = Math.floor(Math.random() * 82) + 4; 
+            const randomRotation = Math.floor(Math.random() * 30) - 15; 
+            const randomScale = (Math.random() * 0.2) + 0.9; 
+            
+            element.style.left = `${randomLeft}%`;
+            element.style.transform = `scale(${randomScale}) rotate(${randomRotation}deg)`;
+        }
+    </script>
+</body>
+</html>
